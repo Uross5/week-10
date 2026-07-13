@@ -1,17 +1,15 @@
-import json
-from textwrap import indent
+from methods import load_file,save_file
 
-with open("data/user.json", "r") as file:
-    data=json.load(file)
-    data.append({
-        "name":"Luke Thompson",
-        "age":25,
-        "height":170,
-        "gender":"male"
-    })
+data=load_file("data/user.json")
+print(data)
 
-    with open("data/user.json", "w") as file:
-        json.dump(data,file,indent=4)
+data.append({
+    "name":"Test test"
+
+})
+
+save_file("data/user.json",data)
+
 
 
 
