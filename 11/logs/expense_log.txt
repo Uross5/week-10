@@ -1,3 +1,0 @@
-
-Amount5000,User:1,Budget:93000, Remaining budget: 88000,DataTime: 2026-07-05
-Amount50000,User:1,Budget:93000, Remaining budget: 43000,DataTime: 2026-07-05 22:34:55.146105

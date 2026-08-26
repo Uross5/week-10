@@ -1,9 +1,0 @@
-
-  {
-    "id": 1,
-    "name":"John",
-    "age": 31,
-    "budget": 50000,
-    "credit": 43000,
-    "currency": "eur"
-  }
