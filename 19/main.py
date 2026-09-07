@@ -1,64 +1,49 @@
-import random
+from models.book import *
+from models.db import connection
+from models.user import *
 
 
-from db import connection
+option=None
 
+while option is None or option== '':
+    option=input("Enter your choice: \n 1. Create a random book \n 2. Show books \n 3. Show book by ID "
+                 "\n 4. Delete a book"  ).strip()
+    if option == "":
+        print("Choice cannot be empty")
+        continue
+    option=int(option)
 
-from faker import Faker
+    if option==1:
+        genre=generate_genre()
+        author=generate_author_name()
+        title=generate_book_title(genre,author)
+        dob=generate_date_of_birth()
 
-faker=Faker()
+        user=insert_users(connection,author,dob)
+        insert_books(connection,title,genre,user)
+        print(f"Created a random book and title is {title} ")
 
-genres=["Mystery","Adventure","Fantasy"]
-adjectives=["Dark","Forbidden","Mysterious","Hidden","Eternal"]
-nouns=["Secrets","Kingdom","Journey","Love","Shadow"]
+    elif option==2:
+        books = get_all_books(connection)
+        print(books)
 
-def generate_author_name():
-    author_name = faker.name()
-    return author_name
-
-def generate_genre():
-    genre = random.choice(genres)
-    return genre
-
-def generate_date_of_birth():
-    dob = faker.date_of_birth()
-    return dob
-
-def generate_book_title(book_genre,book_author):
-    noun=random.choice(nouns)
-    adjective=random.choice(adjectives)
-    book_name=f"{adjective} {noun}:A {book_genre} story by {book_author}"
-    return book_name
-
-    #print(book_name)
-
-
-def insert_users(con,name,date_of_birth):
-    cursor = con.cursor()
-    query="INSERT INTO users(name,dob) VALUES (%s,%s)"
-    cursor.execute(query,(name,date_of_birth))
-    con.commit()
-    cursor.close()
-
-def insert_books(con,book_name,category,author):
-    cursor = con.cursor()
-    query="INSERT INTO books(name,category,author) VALUES (%s,%s,%s)"
-    cursor.execute(query,(book_name,category,author))
-    con.commit()
-    cursor.close()
-
-genre=generate_genre()
-dob=generate_date_of_birth()
-author_name=generate_author_name()
-book_title=generate_book_title(genre,author_name)
-insert_users(connection,author_name,dob)
-insert_books(connection,book_title,genre,author_name)
-print(genre,dob,book_title)
+    elif option==3:
+        book=None
+        while book is None:
+            book_id=int(input("Enter your book id: "))
+            book=get_book_by_id(connection,book_id)
+            if book is None:
+                print("Book does not exist")
+            else:
+                print(book)
+    elif option==4:
+        book_id=int(input("Enter your book id: "))
+        delete_book(connection,book_id)
+    else:
+        option=None
+connection.close()
 
 
 
 
-# generate_book_title(connection)
-# insert_users(connection,"Uros","2001-11-12")
-# insert_books(connection,"Orlovi rano lete","Roman","Branko Copic")
 
